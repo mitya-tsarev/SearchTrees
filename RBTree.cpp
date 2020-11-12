@@ -8,8 +8,8 @@ private:
 public:
     RBTree<T>() = default;
 
-    bool find(T value) {
-        return (root == nullptr ? false : root->find(value));
+    RBNode<T>* getRoot() {
+        return root;
     }
 
     void erase(T value) {
