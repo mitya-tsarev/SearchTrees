@@ -1,21 +1,4 @@
-#include <set>
-#include <iostream>
-#include "abs_node.cpp"
-
-
-template <class T> class node : public abs_node<T>{
-public:
-    int height;
-    node* left;
-    node* right;
-
-    node(T k) : abs_node<T>(k){
-        left = nullptr;
-        right = nullptr;
-        height = 1;
-    }
-};
-
+#include "AVLNode.cpp"
 
 template <class T> class AVL_tree{
 private:
@@ -152,16 +135,3 @@ public:
     }
 };
 
-
-int main(){
-    AVL_tree<int> tree = AVL_tree<int>();
-    tree.insert(239);
-    tree.insert(15);
-    tree.insert(238);
-    tree.insert(37);
-    tree.insert(40);
-    tree.insert(3);
-    std::cout << tree.find(239) << tree.find(4087) << tree.find(3);
-
-    return 0;
-}

@@ -1,35 +1,15 @@
 #include <iostream>
-
-
-template <typename T> class ABSNode
-{
-protected:
-    T value;
-    virtual ABSNode* getLeft() = 0;
-    virtual ABSNode* getRight() = 0;
-public:
-    explicit ABSNode (T value) {
-        this-> value = value;
-    }
-};
-
-template <typename T> class ABSTree
-{
-private:
-    ABSNode<T>* root;
-public:
-    virtual void insert (T value) = 0;
-    virtual void erase (T value) = 0;
-    virtual void find (T value) = 0;
-};
-
-template <typename T> class RBNode : public ABSNode<T> {
-private:
-
-};
-
+#include "AVL.cpp"
+#include "RBTree.cpp"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    AVL_tree<int> tree = AVL_tree<int>();
+    tree.insert(239);
+    tree.insert(15);
+    tree.insert(238);
+    tree.insert(37);
+    tree.insert(40);
+    tree.insert(32);
+    std::cout << tree.find(239) << tree.find(4087) << tree.find(3);
     return 0;
 }
