@@ -11,4 +11,10 @@ public:
     explicit ABSNode(T value) {
         this->value = value;
     }
+
+    bool find(T val) {
+        if (value == val) return true;
+        if (value > val) return (getLeft() == nullptr ? false : getLeft()->find(val));
+        return (getRight() == nullptr ? false : getRight()->find(val));
+    }
 };

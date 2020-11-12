@@ -4,19 +4,12 @@
 template<typename T>
 class RBTree : public SearchTree<T> {
 private:
-    RBNode<T> *left = nullptr;
-    RBNode<T> *right = nullptr;
+    RBNode<T> *root = nullptr;
 public:
-    RBNode<T> *getRight() {
-        return right;
-    }
-
-    RBNode<T> *getLeft() {
-        return left;
-    }
+    RBTree<T>() = default;
 
     bool find(T value) {
-        return true;
+        return (root == nullptr ? false : root->find(value));
     }
 
     void erase(T value) {
@@ -24,6 +17,7 @@ public:
     }
 
     void insert(T value) {
-
+        if (root == nullptr) root = new RBNode<T>(value);
+        else root->insert(value);
     }
 };

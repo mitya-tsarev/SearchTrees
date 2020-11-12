@@ -2,8 +2,6 @@
 
 template<typename T>
 class SearchTree {
-private:
-    ABSNode<T> *root;
 public:
     virtual void insert(T value) = 0;
 
