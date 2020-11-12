@@ -5,6 +5,7 @@ private:
     bool color = false; // false for black, true for red
     RBNode *left = nullptr;
     RBNode *right = nullptr;
+    RBNode *parent = nullptr;
 public:
     explicit RBNode(T value) : ABSNode<T>(value) {}
 
@@ -16,7 +17,7 @@ public:
         return left;
     }
 
-    void insert(T value) {
+    void insert(T value) { // TODO change return type to node*
         if (this->value == value) return;
         if (this->value > value) {
             if (left == nullptr) left = new RBNode<T>(value);

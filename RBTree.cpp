@@ -8,16 +8,21 @@ private:
 public:
     RBTree<T>() = default;
 
-    RBNode<T>* getRoot() {
+    RBNode<T> *getRoot() {
         return root;
-    }
-
-    void erase(T value) {
-
     }
 
     void insert(T value) {
         if (root == nullptr) root = new RBNode<T>(value);
         else root->insert(value);
+        //TODO use result of insert to rebalance
+    }
+
+    void erase(T value) {
+        //TODO
+    }
+
+    void rebalance(RBNode<T>* node) {
+        //TODO
     }
 };
