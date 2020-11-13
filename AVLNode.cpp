@@ -1,12 +1,12 @@
-#include "abs_node.cpp"
+#include "ABSNode.cpp"
 
-template <class T> class node : public abs_node<T>{
+template <class T> class AVLNode : public ABSNode<T>{
 public:
     int height;
-    node* left;
-    node* right;
+    AVLNode* left;
+    AVLNode* right;
 
-    node(T k) : abs_node<T>(k){
+    explicit AVLNode(T k) : ABSNode<T>(k){
         left = nullptr;
         right = nullptr;
         height = 1;
