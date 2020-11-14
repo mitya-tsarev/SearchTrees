@@ -6,7 +6,10 @@
 #include <string>
 #include "AVLTree.h"
 #include "RBTree.h"
+#include <chrono>
 #define nullptr NULL
+
+typedef std::chrono::high_resolution_clock Clock;
 
 using namespace std;
 
@@ -43,9 +46,9 @@ public:
         double start, finish;
 
         if (s == "AVL_Tree") {
-            AVLTree<T> avl = AVLTree<T>();
+            AVLTree<T> tre = AVLTree<T>();
         } else if (s == "RB_Tree") {
-            RBTree<T> avl = RBTree<T>();
+            RBTree<T> tre = RBTree<T>();
         }
 
 
@@ -63,17 +66,17 @@ public:
         double timeinsert2 = 0;
         double timefind2 = 0;
         double timeerase2 = 0;
+        
 
         for (int i = 1; i <= y1; i++) { // search for average operation execution times for trees with different number of nodes (y1)
             array_size = i * nmult;
             timeinsertn = 0;
             timefindn = 0;
             timeerasen = 0;
-            for (int k = 0; k <
-                            y2; k++) { // search for average operation execution times for different trees with the same number of nodes (y2)
-                AVLTree<long long> avl = AVLTree<long long>(); // create new tree
+            for (int k = 0; k < y2; k++) { // search for average operation execution times for different trees with the same number of nodes (y2)
+                AVLTree<long long> tre = AVLTree<long long>(); // create new tree
                 for (int j = 0; j < array_size; j++) {
-                    avl.insert(((rand() % 10000) * 100000000 + (rand() % 10000) * 10000 + rand() % 10000) % (array_size * 100)); // add nodes with random values
+                    tre.insert(((rand() % 10000) * 100000000 + (rand() % 10000) * 10000 + rand() % 10000) % (array_size * 100)); // add nodes with random values
                 }
                 timeinsert1 = 0;
                 timefind1 = 0;
@@ -85,27 +88,27 @@ public:
                     timeinsert2 = 0;
                     timefind2 = 0;                    
                     timeerase2 = 0;
-                    for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)                       
-                        start = clock();
-                        avl.insert(test);
-                        finish = clock();
-                        timeinsert2 += (finish * Ct - start * Ct)/CLOCKS_PER_SEC;
-                        avl.erase(test);
+                    for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)
+						auto t1 = Clock::now();                      
+                        tre.insert(test);
+                        auto t2 = Clock::now();
+                        timeinsert2 += chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count();
+                        tre.erase(test);
                     }
                     for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)                       
-                        avl.insert(test);
-                        start = clock();
-                        avl.find(test);
-                        finish = clock();
-                        timefind2 += (finish * Ct - start * Ct)/CLOCKS_PER_SEC;
-                        avl.erase(test);
+                        tre.insert(test);
+                        auto t1 = Clock::now();
+                        tre.find(test);
+                        auto t2 = Clock::now();
+                        timefind2 += chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count();
+                        tre.erase(test);
                     }
                     for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)                       
-                        avl.insert(test);
-                        start = clock();
-                        avl.erase(test);
-                        finish = clock();
-                        timeerase2 += (finish * Ct - start * Ct)/CLOCKS_PER_SEC;
+                        tre.insert(test);
+                        auto t1 = Clock::now();
+                        tre.erase(test);
+                        auto t2 = Clock::now();
+                        timeerase2 += chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count();
                     }
                     timeinsert2 = timeinsert2 / x2;
                     timefind2 = timefind2 / x2;
@@ -144,7 +147,7 @@ int main() {
     std::cout << "Searching RB tree: \n179: " << (rb.find(179) ? "Yes" : "No") << "\n40: " << (rb.find(40) ? "Yes" : "No") << '\n';*/
 
     ofstream out;
-    out.open("data3.txt");
+    out.open("treeData.txt");
     int y1 = 10;
 
     Profiler<long long> prof = Profiler<long long>("AVL_Tree");
