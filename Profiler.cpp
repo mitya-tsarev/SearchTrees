@@ -50,7 +50,7 @@ public:
 
         if (AVL) {
             tre = new AVLTree<long long>();
-        } 
+        }
 		else{
             tre = new RBTree<long long>();
         }
@@ -70,7 +70,7 @@ public:
         double timeinsert2 = 0;
         double timefind2 = 0;
         double timeerase2 = 0;
-        
+
 
         for (int i = 1; i <= y1; i++) { // search for average operation execution times for trees with different number of nodes (y1)
             array_size = i * nmult;
@@ -80,7 +80,7 @@ public:
             for (int k = 0; k < y2; k++) { // search for average operation execution times for different trees with the same number of nodes (y2)
                 if (AVL) {
                     tre = new AVLTree<long long>();
-        		} 
+        		}
 				else{
                     tre = new RBTree<long long>();
         		} // create new tree
@@ -94,16 +94,16 @@ public:
                     test = ((rand() % 10000) * 10000 + rand() % 10000) % (array_size * 100);
                     cout << test << endl;
                     timeinsert2 = 0;
-                    timefind2 = 0;                    
+                    timefind2 = 0;
                     timeerase2 = 0;
                     for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)
-						auto t1 = Clock::now();                      
+						auto t1 = Clock::now();
                         tre->insert(test);
                         auto t2 = Clock::now();
                         timeinsert2 += chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count();
                         tre->erase(test);
                     }
-                    for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)                       
+                    for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)
                         tre->insert(test);
                         auto t1 = Clock::now();
                         tre->find(test);
@@ -111,7 +111,7 @@ public:
                         timefind2 += chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count();
                         tre->erase(test);
                     }
-                    for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)                       
+                    for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)
                         tre->insert(test);
                         auto t1 = Clock::now();
                         tre->erase(test);

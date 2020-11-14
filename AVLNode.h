@@ -15,7 +15,7 @@ public:
 
     explicit AVLNode(T value);
 
-    //~AVLNode();
+    ~AVLNode() = default;
 
     AVLNode *getRight();
 
@@ -28,12 +28,13 @@ public:
     class AVLTree;
 };
 
-
-/*template<typename T>
+/*
+template<typename T>
 AVLNode<T>::~AVLNode(){
     delete right;
     delete left;
-}*/
+}
+*/
 
 template<typename T>
 AVLNode<T>::AVLNode(T value) : ABSNode<T>(value) {

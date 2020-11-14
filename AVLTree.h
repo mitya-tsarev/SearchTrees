@@ -72,7 +72,7 @@ void AVLTree<T>::destroyRecursive(AVLNode<T> *p){
     if(p != nullptr){
         destroyRecursive(p->right);
         destroyRecursive(p->left);
-    delete p;
+        delete p;
     }
 }
 
