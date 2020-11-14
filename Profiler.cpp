@@ -4,8 +4,8 @@
 #include <vector>
 #include <fstream>
 #include <string>
-#include "AVLTree.cpp"
-#include "RBTree.cpp"                    
+#include "AVLTree.h"
+#include "RBTree.h"                    
 using namespace std;
  
  struct times{ // struct containing number of nodes in the tree and average operation execution times for it
