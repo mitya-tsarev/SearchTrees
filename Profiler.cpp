@@ -24,7 +24,7 @@ private:
 
     string s;
     
-    const int Ct = 1000000*(-1);
+    const int Ct = 1000000;
 
 public:
 
@@ -40,7 +40,7 @@ public:
 
         srand(time(0));
 
-        double start;
+        double start, finish;
 
         if (s == "AVL_Tree") {
             AVLTree<T> avl = AVLTree<T>();
@@ -64,8 +64,7 @@ public:
         double timefind2 = 0;
         double timeerase2 = 0;
 
-        for (int i = 1; i <=
-                        y1; i++) { // search for average operation execution times for trees with different number of nodes (y1)
+        for (int i = 1; i <= y1; i++) { // search for average operation execution times for trees with different number of nodes (y1)
             array_size = i * nmult;
             timeinsertn = 0;
             timefindn = 0;
@@ -89,13 +88,24 @@ public:
                     for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)                       
                         start = clock();
                         avl.insert(test);
-                        timeinsert2 += (clock() * Ct - start * Ct)/CLOCKS_PER_SEC;
+                        finish = clock();
+                        timeinsert2 += (finish * Ct - start * Ct)/CLOCKS_PER_SEC;
+                        avl.erase(test);
+                    }
+                    for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)                       
+                        avl.insert(test);
                         start = clock();
                         avl.find(test);
-                        timefind2 += (clock() * Ct - start * Ct)/CLOCKS_PER_SEC;
+                        finish = clock();
+                        timefind2 += (finish * Ct - start * Ct)/CLOCKS_PER_SEC;
+                        avl.erase(test);
+                    }
+                    for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)                       
+                        avl.insert(test);
                         start = clock();
                         avl.erase(test);
-                        timeerase2 += (clock() * Ct - start * Ct)/CLOCKS_PER_SEC;
+                        finish = clock();
+                        timeerase2 += (finish * Ct - start * Ct)/CLOCKS_PER_SEC;
                     }
                     timeinsert2 = timeinsert2 / x2;
                     timefind2 = timefind2 / x2;
