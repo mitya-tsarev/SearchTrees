@@ -3,4 +3,4 @@ project(SearchTrees)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(SearchTrees Profiler.cpp)
+add_executable(SearchTrees main.cpp Profiler.cpp)
