@@ -3,13 +3,13 @@
 #include "Profiler.cpp"
 
 int main() {
-    RBTree<int> rb = RBTree<int>();
-    rb.insert(5);
-    rb.insert(3);
-    rb.insert(179);
-    rb.insert(1);
-    rb.erase(179);
-    std::cout << "Searching RB tree: \n179: " << (rb.find(179) ? "Yes" : "No") << "\n3: " << (rb.find(3) ? "Yes" : "No") << '\n';
-
+    auto *rb = new RBTree<int>();
+    long long k = 1;
+    for (int i = 0; i < 10000000 + 19; ++i) {
+        rb -> insert(k);
+        k += 3000017;
+        k %= (10000000 + 19);
+    }
+    delete rb;
     return 0;
 }

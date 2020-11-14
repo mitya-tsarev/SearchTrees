@@ -60,7 +60,7 @@ void RBTree<T>::destroyRecursive(RBNode<T> *p){
 
 template<typename T>
 RBTree<T>::~RBTree(){
-    destroyRecursive(this->root);
+    delete root;
 }
 
 template<typename T>

@@ -37,18 +37,20 @@ private:
 
     void moveDown(RBNode<T> *nParent);
 
+    RBNode<T> *insertionRebalance();
+
+    RBNode *basicInsert(T val);
+
 public:
     explicit RBNode(T value);
 
     RBNode(T value, bool red, RBNode<T> *parent);
 
+    ~RBNode();
+
     RBNode *getRight();
 
     RBNode *getLeft();
-
-    RBNode *basicInsert(T val);
-
-    RBNode<T> *insertionRebalance();
 
     template<typename TT>
     friend
@@ -64,6 +66,12 @@ RBNode<T>::RBNode(T value, bool red, RBNode<T> *parent) : ABSNode<T>(value) {
 
 template<typename T>
 RBNode<T>::RBNode(T value) : ABSNode<T>(value) {}
+
+template<typename T>
+RBNode<T>::~RBNode() {
+    delete left;
+    delete right;
+}
 
 template<typename T>
 RBNode<T> *RBNode<T>::recolor() {
@@ -144,7 +152,7 @@ RBNode<T> *RBNode<T>::basicInsert(T val) {
     return right->basicInsert(val);
 }
 
-template <typename T>
+template<typename T>
 void RBNode<T>::moveDown(RBNode<T> *nParent) {
     if (parent != nullptr) {
         if (isOnLeft()) {
