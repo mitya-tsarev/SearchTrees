@@ -5,20 +5,21 @@
 
 template<typename T>
 class AVLNode : public ABSNode<T> {
-//private:
-
-public:
+private:
     int height = 0;
     AVLNode *left = nullptr;
     AVLNode *right = nullptr;
 
 
+public:
+
     explicit AVLNode(T value);
+
+    //~AVLNode();
 
     AVLNode *getRight();
 
     AVLNode *getLeft();
-
 
     T getValue();
 
@@ -26,6 +27,13 @@ public:
     friend
     class AVLTree;
 };
+
+
+/*template<typename T>
+AVLNode<T>::~AVLNode(){
+    delete right;
+    delete left;
+}*/
 
 template<typename T>
 AVLNode<T>::AVLNode(T value) : ABSNode<T>(value) {

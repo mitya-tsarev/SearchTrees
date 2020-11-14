@@ -16,6 +16,8 @@ public:
     explicit ABSNode(T value);
 
     bool find(T val);
+
+    ~ABSNode() = default;
 };
 
 

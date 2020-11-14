@@ -5,6 +5,7 @@
 int main() {
     AVLTree<int> avl = AVLTree<int>();
     avl.insert(15);
+    avl.erase(15);
     avl.insert(400);
     avl.insert(239);
     avl.insert(1);
