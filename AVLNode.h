@@ -22,8 +22,9 @@ public:
 
     T getValue();
 
-
-    //friend class AVLTree;
+    template<typename TT>
+    friend
+    class AVLTree;
 };
 
 template<typename T>
