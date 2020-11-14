@@ -17,11 +17,13 @@ struct times { // struct containing number of nodes in the tree and average oper
 };
 
 template <typename T>
-class Profiler : public AVLTree<T>, public RBTree<T> {
+class Profiler{
 
 private:
 
     string s;
+
+    const int Ct = 1000000;
 
 public:
 
@@ -33,11 +35,11 @@ public:
 
     }
 
-    vector<times> average(int x1, int x2, int y1, int y2) {
+    vector<times> average(int x1, int x2, int y1, int y2, int nmult) {
 
         srand(time(0));
 
-        double start;
+        double start, finish;
 
         if (s == "AVL_Tree") {
             AVLTree<T> avl = AVLTree<T>();
@@ -61,40 +63,48 @@ public:
         double timefind2 = 0;
         double timeerase2 = 0;
 
-        for (int i = 1; i <=
-                        y1; i++) { // search for average operation execution times for trees with different number of nodes (y1)
-            array_size = i * 1000000;
+        for (int i = 1; i <= y1; i++) { // search for average operation execution times for trees with different number of nodes (y1)
+            array_size = i * nmult;
             timeinsertn = 0;
             timefindn = 0;
             timeerasen = 0;
             for (int k = 0; k <
                             y2; k++) { // search for average operation execution times for different trees with the same number of nodes (y2)
-                AVLTree<int> avl = AVLTree<int>(); // create new tree
+                AVLTree<long long> avl = AVLTree<long long>(); // create new tree
                 for (int j = 0; j < array_size; j++) {
-                    avl.insert(((rand() % 100000) * 100000 + rand() % 10000) %
-                               (array_size * 10)); // add nodes with random values
+                    avl.insert(((rand() % 10000) * 100000000 + (rand() % 10000) * 10000 + rand() % 10000) % (array_size * 100)); // add nodes with random values
                 }
                 timeinsert1 = 0;
                 timefind1 = 0;
                 timeerase1 = 0;
                 for (int j = 0;
                      j < x1; j++) { // search for average operation execution times for different numbers (x1)
-                    test = ((rand() % 10000) * 10000 + rand() % 10000) % (array_size * 10);
+                    test = ((rand() % 10000) * 10000 + rand() % 10000) % (array_size * 100);
                     cout << test << endl;
                     timeinsert2 = 0;
                     timefind2 = 0;
                     timeerase2 = 0;
-                    for (int l = 0;
-                         l < x2; l++) { // search for average operation execution times for the same number (x2)
+                    for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)
                         start = clock();
                         avl.insert(test);
-                        timeinsert2 += clock() * 10000 - start * 10000;
+                        finish = clock();
+                        timeinsert2 += (finish * Ct - start * Ct)/CLOCKS_PER_SEC;
+                        avl.erase(test);
+                    }
+                    for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)
+                        avl.insert(test);
                         start = clock();
                         avl.find(test);
-                        timefind2 += clock() * 10000 - start * 10000;
+                        finish = clock();
+                        timefind2 += (finish * Ct - start * Ct)/CLOCKS_PER_SEC;
+                        avl.erase(test);
+                    }
+                    for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)
+                        avl.insert(test);
                         start = clock();
                         avl.erase(test);
-                        timeerase2 += clock() * 10000 - start * 10000;
+                        finish = clock();
+                        timeerase2 += (finish * Ct - start * Ct)/CLOCKS_PER_SEC;
                     }
                     timeinsert2 = timeinsert2 / x2;
                     timefind2 = timefind2 / x2;

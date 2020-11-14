@@ -13,6 +13,10 @@ public:
     virtual void insert(T value) = 0;
 
     bool find(T value);
+
+    SearchTree() = default;
+
+    ~SearchTree() = default;
 };
 
 

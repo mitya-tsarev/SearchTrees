@@ -1,5 +1,7 @@
+#include <iostream>
 #ifndef TREEPROJECT_ABSNODE_H
 #define TREEPROJECT_ABSNODE_H
+#define nullptr NULL
 
 template<typename T>
 class ABSNode {
@@ -14,6 +16,8 @@ public:
     explicit ABSNode(T value);
 
     bool find(T val);
+
+    ~ABSNode() = default;
 };
 
 
