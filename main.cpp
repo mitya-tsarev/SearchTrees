@@ -1,14 +1,14 @@
 #include <iostream>
 #include "AVLTree.cpp"
-#include "RBTree.cpp"
+#include "RBTree.h"
 
 int main() {
-    AVL_tree<int> avl = AVL_tree<int>();
+    /*AVLTree<int> avl = AVLTree<int>();
     avl.insert(15);
     avl.insert(400);
     avl.insert(239);
     avl.insert(1);
-    std::cout << "Searching AVL tree: \n239: " << (avl.find(239) ? "Yes" : "No") << "\n40: " << (avl.find(40) ? "Yes" : "No") << '\n';
+    std::cout << "Searching AVL tree: \n239: " << (avl.find(239) ? "Yes" : "No") << "\n40: " << (avl.find(40) ? "Yes" : "No") << '\n';*/
     RBTree<int> rb = RBTree<int>();
     rb.insert(2);
     rb.insert(3);
