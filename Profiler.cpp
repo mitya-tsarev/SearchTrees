@@ -6,11 +6,8 @@
 #include <string>
 #include "AVLTree.h"
 #include "RBTree.h"
-<<<<<<< HEAD
 #include <chrono>
 #define nullptr NULL
-=======
->>>>>>> 94505048c53e31932a87862d0b561720e6bec6db
 
 typedef std::chrono::high_resolution_clock Clock;
 
@@ -28,14 +25,26 @@ class Profiler{
 
 private:
 
-    string s;
+    bool AVL;
 
     const int Ct = 1000000;
 
 public:
 
-    Profiler(std::string s1) {
-        s = s1;
+    Profiler(bool AVL) {ofstream out;
+        out.open("treeData.txt");
+        int y1 = 10;
+
+        Profiler<long long> prof = Profiler<long long>("AVL_Tree");
+        vector<times> a = prof.average(1, 1, 1, 1, 5000000);
+
+        for (int i = 0; i < y1; i++) {
+            if (out.is_open()) {
+                out << a[i].n << ' ' << a[i].timeinsert << ' ' << a[i].timefind << ' ' << a[i].timeerase << endl;
+            }
+        }
+        out.close();
+        this->AVL = AVL;
     }
 
     ~Profiler() {
@@ -48,9 +57,9 @@ public:
 
         double start, finish;
 
-        if (s == "AVL_Tree") {
+        if (AVL) {
             AVLTree<T> tre = AVLTree<T>();
-        } else if (s == "RB_Tree") {
+        } else {
             RBTree<T> tre = RBTree<T>();
         }
 
@@ -92,8 +101,7 @@ public:
                     timefind2 = 0;
                     timeerase2 = 0;
                     for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)
-<<<<<<< HEAD
-						auto t1 = Clock::now();                      
+						auto t1 = Clock::now();
                         tre.insert(test);
                         auto t2 = Clock::now();
                         timeinsert2 += chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count();
@@ -113,28 +121,26 @@ public:
                         tre.erase(test);
                         auto t2 = Clock::now();
                         timeerase2 += chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count();
-=======
                         start = clock();
-                        avl.insert(test);
+                        tre.insert(test);
                         finish = clock();
                         timeinsert2 += (finish * Ct - start * Ct)/CLOCKS_PER_SEC;
-                        avl.erase(test);
+                        tre.erase(test);
                     }
                     for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)
-                        avl.insert(test);
+                        tre.insert(test);
                         start = clock();
-                        avl.find(test);
+                        tre.find(test);
                         finish = clock();
                         timefind2 += (finish * Ct - start * Ct)/CLOCKS_PER_SEC;
-                        avl.erase(test);
+                        tre.erase(test);
                     }
                     for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)
-                        avl.insert(test);
+                        tre.insert(test);
                         start = clock();
-                        avl.erase(test);
+                        tre.erase(test);
                         finish = clock();
                         timeerase2 += (finish * Ct - start * Ct)/CLOCKS_PER_SEC;
->>>>>>> 94505048c53e31932a87862d0b561720e6bec6db
                     }
                     timeinsert2 = timeinsert2 / x2;
                     timefind2 = timefind2 / x2;
@@ -161,33 +167,21 @@ public:
         }
         return plottimes;
     }
+
+    void analyze(const std::string& filename, bool avl) {
+        ofstream out;
+        out.open(filename);
+        int y1 = 10;
+
+        Profiler<long long> prof = Profiler<long long>(avl);
+        vector<times> a = prof.average(1, 1, 1, 1, 5000000);
+
+        for (int i = 0; i < y1; i++) {
+            if (out.is_open()) {
+                out << a[i].n << ' ' << a[i].timeinsert << ' ' << a[i].timefind << ' ' << a[i].timeerase << endl;
+            }
+        }
+        out.close();
+    }
 };
 
-<<<<<<< HEAD
-int main() {
-    /*RBTree<int> rb = RBTree<int>();
-    rb.insert(5);
-    rb.insert(3);
-    rb.insert(179);
-    //rb.insert(1);
-    std::cout << "Searching RB tree: \n179: " << (rb.find(179) ? "Yes" : "No") << "\n40: " << (rb.find(40) ? "Yes" : "No") << '\n';*/
-
-    ofstream out;
-    out.open("treeData.txt");
-    int y1 = 10;
-
-    Profiler<long long> prof = Profiler<long long>("AVL_Tree");
-    vector<times> a = prof.average(3, 3, 20, 1, 5000000);
-
-    for (int i = 0; i < y1; i++) {
-        if (out.is_open()) {
-            out << a[i].n << ' ' << a[i].timeinsert << ' ' << a[i].timefind << ' ' << a[i].timeerase << endl;
-        }
-    }
-    out.close();
-
-    return 0;
-}
-
-=======
->>>>>>> 94505048c53e31932a87862d0b561720e6bec6db

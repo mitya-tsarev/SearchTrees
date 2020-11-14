@@ -31,6 +31,11 @@ private:
 
     RBNode<T> *findNode(T val);
 
+    bool isOnLeft();
+
+    bool hasRedChild();
+
+    void moveDown(RBNode<T> *nParent);
 
 public:
     explicit RBNode(T value);
@@ -76,7 +81,7 @@ RBNode<T> *RBNode<T>::findNode(T val) {
 template<typename T>
 RBNode<T> *RBNode<T>::getSibling() {
     if (parent == nullptr) return nullptr;
-    return (parent->value > this->value) ? parent->right : parent->left;
+    return isOnLeft() ? parent->right : parent->left;
 }
 
 template<typename T>
@@ -118,6 +123,11 @@ RBNode<T> *RBNode<T>::getLeft() {
 }
 
 template<typename T>
+bool RBNode<T>::isOnLeft() {
+    return this == parent->left;
+}
+
+template<typename T>
 RBNode<T> *RBNode<T>::basicInsert(T val) {
     if (this->value == val) return this;
     if (this->value > val) {
@@ -132,6 +142,19 @@ RBNode<T> *RBNode<T>::basicInsert(T val) {
         return right;
     }
     return right->basicInsert(val);
+}
+
+template <typename T>
+void RBNode<T>::moveDown(RBNode<T> *nParent) {
+    if (parent != nullptr) {
+        if (isOnLeft()) {
+            parent->left = nParent;
+        } else {
+            parent->right = nParent;
+        }
+    }
+    nParent->parent = parent;
+    parent = nParent;
 }
 
 template<typename T>
@@ -219,6 +242,12 @@ RBNode<T> *RBNode<T>::insertionRebalance() { // return new root, nullptr if didn
     bool secondL = (parent->value > this->value);
     if (firstL) return (secondL ? llRotation() : lrRotation());
     else return (secondL ? rlRotation() : rrRotation());
+}
+
+template<typename T>
+bool RBNode<T>::hasRedChild() {
+    return (left != nullptr && left->red) ||
+           (right != nullptr && right->red);
 }
 
 #endif //TREEPROJECT_RBNODE_H

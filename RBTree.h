@@ -9,25 +9,28 @@ class RBTree : public SearchTree<T> {
 private:
     RBNode<T> *root = nullptr;
 
-    void deleteFix(RBNode<T> *x);
-
-    void leftRotate(RBNode<T>* x);
-
-    void rightRotate(RBNode<T>* x);
-
-    void rbTransplant(RBNode<T>* u, RBNode<T>* v);
-
-    void deleteNodeHelper(RBNode<T>* node, T key);
-
-    RBNode<T>* minimum(RBNode<T>* node);
-
     void destroyRecursive(RBNode<T> *p);
-    
+
+    void leftRotate(RBNode<T> *x);
+
+    void rightRotate(RBNode<T> *x);
+
+    RBNode<T> *successor(RBNode<T> *x);
+
+    RBNode<T> *BSTreplace(RBNode<T> *x);
+
+    void deleteNode(RBNode<T> *v);
+
+    void fixDoubleBlack(RBNode<T> *x);
+
+    RBNode<T> * search(T val);
+
+    void swapValues(RBNode<T> *u, RBNode<T> *v);
+
 public:
     RBTree<T>();
 
     RBNode<T> *getRoot();
-
 
     ~RBTree();
 
@@ -71,178 +74,241 @@ void RBTree<T>::insert(T value) {
 }
 
 template<typename T>
-void RBTree<T>::erase(T value) {
-    deleteNodeHelper(this->root, value);
-}
+RBNode<T> *RBTree<T>::BSTreplace(RBNode<T> *x) {
+    // when node have 2 children
+    if (x->left != nullptr and x->right != nullptr)
+        return successor(x->right);
 
-template<typename T>
-void RBTree<T>::leftRotate(RBNode<T>* x) {
-    RBNode<T>* y = x->right;
-    x->right = y->left;
-    if (y->left != nullptr) {
-        y->left->parent = x;
-    }
-    y->parent = x->parent;
-    if (x->parent == nullptr) {
-        this->root = y;
-    } else if (x == x->parent->left) {
-        x->parent->left = y;
-    } else {
-        x->parent->right = y;
-    }
-    y->left = x;
-    x->parent = y;
-}
+    // when leaf
+    if (x->left == nullptr and x->right == nullptr)
+        return nullptr;
 
-template<typename T>
-void RBTree<T>::rightRotate(RBNode<T> *x) {
-    RBNode<T> *y = x->left;
-    x->left = y->right;
-    if (y->right != nullptr) {
-        y->right->parent = x;
-    }
-    y->parent = x->parent;
-    if (x->parent == nullptr) {
-        this->root = y;
-    } else if (x == x->parent->right) {
-        x->parent->right = y;
-    } else {
-        x->parent->left = y;
-    }
-    y->right = x;
-    x->parent = y;
-}
-
-template<typename T>
-void RBTree<T>::deleteFix(RBNode<T> *x){
-    RBNode<T> *s;
-    if (x == nullptr) return;
-    while (x != root && !(x->red)) {
-        if (x == x->parent->left) {
-            s = x->getSibling();
-            if (s->red) {
-                s->red = false;
-                x->parent->red = true;
-                leftRotate(x->parent);
-                s = x->parent->right;
-            }
-
-            if (!(s->left->red) && !(s->right->red)) {
-                s->red = true;
-                x = x->parent;
-            } else {
-                if (!(s->right->red)) {
-                    s->left->red = false;
-                    s->red = true;
-                    rightRotate(s);
-                    s = x->parent->right;
-                }
-
-                s->red = x->parent->red;
-                x->parent->red = false;
-                s->right->red = false;
-                leftRotate(x->parent);
-                x = root;
-            }
-        } else {
-            s = x->parent->left;
-            if (s->red) {
-                s->red = false;
-                x->parent->red = true;
-                rightRotate(x->parent);
-                s = x->parent->left;
-            }
-
-            if (!(s->right->red) && !(s->left->red)) {
-                s->red = true;
-                x = x->parent;
-            } else {
-                if (! s->left->red) {
-                    s->right->red = false;
-                    s->red = true;
-                    leftRotate(s);
-                    s = x->parent->left;
-                }
-
-                s->red = x->parent->red;
-                x->parent->red = false;
-                s->left->red = false;
-                rightRotate(x->parent);
-                x = root;
-            }
-        }
-    }
-    x->red = false;
-}
-
-template<typename T>
-void RBTree<T>::rbTransplant(RBNode<T>* u, RBNode<T>* v) {
-    if (u->parent == nullptr) {
-        root = v;
-    } else if (u == u->parent->left) {
-        u->parent->left = v;
-    } else {
-        u->parent->right = v;
-    }
-    if (v != nullptr) v->parent = u->parent;
-}
-
-template<typename T>
-void RBTree<T>::deleteNodeHelper(RBNode<T>* node, T key) {
-    RBNode<T>* z = nullptr;
-    RBNode<T>* x = nullptr;
-    RBNode<T>* y = nullptr;
-    while (node != nullptr) {
-        if (node->value == key) {
-            z = node;
-        }
-
-        if (node->value <= key) {
-            node = node->right;
-        } else {
-            node = node->left;
-        }
-    }
-
-    if (z == nullptr) return;
-
-    y = z;
-    bool y_original_color = y->red;
-    if (z->left == nullptr) {
-        x = z->right;
-        rbTransplant(z, z->right);
-    } else if (z->right == nullptr) {
-        x = z->left;
-        rbTransplant(z, z->left);
-    } else {
-        y = minimum(z->right);
-        y_original_color = y->red;
-        x = y->right;
-        if (y->parent == z) {
-            x->parent = y;
-        } else {
-            rbTransplant(y, y->right);
-            y->right = z->right;
-            y->right->parent = y;
-        }
-
-        rbTransplant(z, y);
-        y->left = z->left;
-        y->left->parent = y;
-        y->red = z->red;
-    }
-    delete z;
-    if (! y_original_color) {
-        deleteFix(x);
-    }
+    // when single child
+    if (x->left != nullptr)
+        return x->left;
+    else
+        return x->right;
 }
 
 template <typename T>
-RBNode<T>* RBTree<T>::minimum(RBNode<T>* node) {
-    while (node->left != nullptr) {
-        node = node->left;
+void RBTree<T>::leftRotate(RBNode<T> *x) {
+    RBNode<T> *nParent = x->right;
+
+    // update root if current node is root
+    if (x == root) root = nParent;
+
+    x->moveDown(nParent);
+
+    // connect x with new parent's left element
+    x->right = nParent->left;
+    // connect new parent's left element with node
+    // if it is not null
+    if (nParent->left != nullptr)
+        nParent->left->parent = x;
+
+    // connect new parent with x
+    nParent->left = x;
+}
+
+template <typename T>
+void RBTree<T>::rightRotate(RBNode<T> *x) {
+    // new parent will be node's left child
+    RBNode<T> *nParent = x->left;
+
+    // update root if current node is root
+    if (x == root) root = nParent;
+
+    x->moveDown(nParent);
+
+    // connect x with new parent's right element
+    x->left = nParent->right;
+    // connect new parent's right element with node
+    // if it is not null
+    if (nParent->right != nullptr)
+        nParent->right->parent = x;
+
+    // connect new parent with x
+    nParent->right = x;
+}
+
+template <typename T>
+RBNode<T> * RBTree<T>::successor(RBNode<T> *x) {
+    RBNode<T> *temp = x;
+
+    while (temp->left != nullptr) temp = temp->left;
+
+    return temp;
+}
+
+template <typename T>
+void RBTree<T>::deleteNode(RBNode<T> *v) {
+    RBNode<T> *u = BSTreplace(v);
+
+    // True when u and v are both black
+    bool uvBlack = ((u == nullptr or !u->red) and !v->red);
+    RBNode<T> *parent = v->parent;
+
+    if (u == nullptr) {
+        // u is NULL therefore v is leaf
+        if (v == root) {
+            // v is root, making root null
+            root = nullptr;
+        } else {
+            if (uvBlack) {
+                // u and v both black
+                // v is leaf, fix double black at v
+                fixDoubleBlack(v);
+            } else {
+                // u or v is red
+                if (v->getSibling() != nullptr)
+                    // sibling is not null, make it red"
+                    v->getSibling()->red;
+            }
+
+            // delete v from the tree
+            if (v->isOnLeft()) {
+                parent->left = nullptr;
+            } else {
+                parent->right = nullptr;
+            }
+        }
+        delete v;
+        return;
     }
-    return node;
+
+    if (v->left == nullptr or v->right == nullptr) {
+        // v has 1 child
+        if (v == root) {
+            // v is root, assign the value of u to v, and delete u
+            v->value = u->value;
+            v->left = v->right = nullptr;
+            delete u;
+        } else {
+            // Detach v from tree and move u up
+            if (v->isOnLeft()) {
+                parent->left = u;
+            } else {
+                parent->right = u;
+            }
+            delete v;
+            u->parent = parent;
+            if (uvBlack) {
+                // u and v both black, fix double black at u
+                fixDoubleBlack(u);
+            } else {
+                // u or v red, color u black
+                u->red = false;
+            }
+        }
+        return;
+    }
+
+    // v has 2 children, swap values with successor and recurse
+    swapValues(u, v);
+    deleteNode(u);
+}
+
+template <typename T>
+void RBTree<T>::swapValues(RBNode<T> *u, RBNode<T> *v) {
+    T temp;
+    temp = u->value;
+    u->value = v->value;
+    v->value = temp;
+}
+
+template <typename T>
+void RBTree<T>::fixDoubleBlack(RBNode<T> *x) {
+    if (x == root) return;
+
+    RBNode<T> *sibling = x->getSibling(), *parent = x->parent;
+    if (sibling == nullptr) {
+        // No sibiling, double black pushed up
+        fixDoubleBlack(parent);
+    } else {
+        if (sibling->red) {
+            // Sibling red
+            parent->red = true;
+            sibling->red = false;
+            if (sibling->isOnLeft()) {
+                // left case
+                rightRotate(parent);
+            } else {
+                // right case
+                leftRotate(parent);
+            }
+            fixDoubleBlack(x);
+        } else {
+            // Sibling black
+            if (sibling->hasRedChild()) {
+                // at least 1 red children
+                if (sibling->left != nullptr && sibling->left->red) {
+                    if (sibling->isOnLeft()) {
+                        // left left
+                        sibling->left->red = sibling->red;
+                        sibling->red = parent->red;
+                        rightRotate(parent);
+                    } else {
+                        // right left
+                        sibling->left->red = parent->red;
+                        rightRotate(sibling);
+                        leftRotate(parent);
+                    }
+                } else {
+                    if (sibling->isOnLeft()) {
+                        // left right
+                        sibling->right->red = parent->red;
+                        leftRotate(sibling);
+                        rightRotate(parent);
+                    } else {
+                        // right right
+                        sibling->right->red = sibling->red;
+                        sibling->red = parent->red;
+                        leftRotate(parent);
+                    }
+                }
+                parent->red = false;
+            } else {
+                // 2 black children
+                sibling->red = true;
+                if (!parent->red)
+                    fixDoubleBlack(parent);
+                else
+                    parent->red = false;
+            }
+        }
+    }
+}
+
+template<typename T>
+RBNode<T> * RBTree<T>::search(T val) {
+    RBNode<T> *temp = root;
+    while (temp != nullptr) {
+        if (val < temp->value) {
+            if (temp->left == nullptr)
+                break;
+            else
+                temp = temp->left;
+        } else if (val == temp->value) {
+            break;
+        } else {
+            if (temp->right == nullptr)
+                break;
+            else
+                temp = temp->right;
+        }
+    }
+
+    return temp;
+}
+
+template<typename T>
+void RBTree<T>::erase(T value) {
+    if (root == nullptr) return;
+
+    RBNode<T> *v = search(value); // been u
+
+    if (v->value != value) return;
+    deleteNode(v);
 }
 
 #endif //TREEPROJECT_RBTREE_H
