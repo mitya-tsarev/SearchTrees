@@ -1,9 +1,9 @@
 #include <iostream>
-#include "AVLTree.cpp"
-#include "RBTree.cpp"
+#include "AVLTree.h"
+#include "RBTree.h"
 
 int main() {
-    AVL_tree<int> avl = AVL_tree<int>();
+    AVLTree<int> avl = AVLTree<int>();
     avl.insert(15);
     avl.insert(400);
     avl.insert(239);
