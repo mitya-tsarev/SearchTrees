@@ -3,7 +3,9 @@
 #include <ctime>
 #include <vector>
 #include <fstream>
-#include "AVLTree.cpp"                    
+#include <string>
+#include "AVLTree.cpp"
+#include "RBTree.cpp"                    
 using namespace std;
  
  struct times{ // struct containing number of nodes in the tree and average operation execution times for it
@@ -13,11 +15,19 @@ using namespace std;
  	double timeerase;
  };
 
-class Profiler{
+class Profiler: public AVL_Tree, public RB_Tree{
+
+private
+
+	string s;
 	
 public:
 	
-	Profile(){
+	Profiler(s1){
+		s = s1;
+	}
+	
+	~Profiler(){
 		
 	}
 	
@@ -27,7 +37,13 @@ public:
     
     	double start;
     
-    	AVL_tree<int> avl = AVL_tree<int>();
+    	if (s == "AVL_Tree"){
+    		AVL_tree<int> avl = AVL_tree<int>();
+		}
+		else if (s == "RB_Tree"){
+			RB_Tree<int> avl = RB_Tree<int>();
+		}
+    	
     	
     	int array_size; // number of nodes
     	vector<times> plottimes; // vector where data will be stored
@@ -73,7 +89,7 @@ public:
 	    				timefind2 += clock()*10000 - start*10000;
 	    				start = clock();
 	    				avl.erase(test);
-	    				timeerase2 += clock()*1000000 - start*10000;
+	    				timeerase2 += clock()*10000 - start*10000;
 					}
 					timeinsert2 = timeinsert2 / x2;
 					timefind2 = timefind2 / x2;
@@ -106,7 +122,7 @@ int main(){
 	ofstream out;
 	out.open("data.txt");
 	
-	Profiler prof = Profiler(AVL_Tree);
+	Profiler prof = Profiler("AVL_Tree");
     vector<times> a = prof.average(8, 8, 8, 1);
 	
 	for(int i = 0; i < y1; i++){
