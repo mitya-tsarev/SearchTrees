@@ -1,9 +1,14 @@
 #include "AVLNode.cpp"
+#include "SearchTree.cpp"
 
-template<class T>
-class AVL_tree {
+template<typename T>
+class AVLTree : public SearchTree<T>{
 private:
-    AVLNode<T> *root;
+    AVLNode<T> *root = nullptr;
+
+    AVLNode<T> *getRoot(){
+        return this->root;
+    }
 
     int height(AVLNode<T> *p) {
         return (p != nullptr) ? p->height : 0;
@@ -59,7 +64,7 @@ private:
 
     AVLNode<T> *insert_node(AVLNode<T> *p, int k) {
         if (p == nullptr) return new AVLNode<T>(k);
-        if (k < (*p).get_value())
+        if (k < (*p).getValue())
             p->left = insert_node(p->left, k);
         else
             p->right = insert_node(p->right, k);
@@ -70,15 +75,6 @@ private:
         return (p->left != nullptr) ? find_min(p->left) : p;
     }
 
-    bool find_node(AVLNode<T> *p, int k) {
-        if ((*p).get_value() == k) return true;
-        if ((*p).get_value() > k and p->left == nullptr) return false;
-        else if ((*p).get_value() > k and p->left != nullptr) return find_node(p->left, k);
-
-        if ((*p).get_value() < k and p->right == nullptr) return false;
-        return find_node(p->right, k);
-    }
-
     AVLNode<T> *remove_min(AVLNode<T> *p) {
         if (p->left == nullptr) return p->right;
         p->left = remove_min(p->left);
@@ -87,8 +83,8 @@ private:
 
     AVLNode<T> *remove_node(AVLNode<T> *p, int k) {
         if (p == nullptr) return nullptr;
-        if (k < (*p).get_value()) p->left = remove_node(p->left, k);
-        else if (k > (*p).get_value()) p->right = remove_node(p->right, k);
+        if (k < p->getValue()) p->left = remove_node(p->left, k);
+        else if (k > p->getValue()) p->right = remove_node(p->right, k);
         else {
             AVLNode<T> *q = p->left;
             AVLNode<T> *r = p->right;
@@ -111,19 +107,14 @@ private:
 
 
 public:
-    AVL_tree() {
-        root = nullptr;
-    }
 
-    explicit AVL_tree(AVLNode<T> *root) {
-        this->root = root;
-    }
+    AVLTree() = default;
 
     void insert(T k) {
         if (root == nullptr) {
             root = new AVLNode<T>(k);
         } else {
-            if (k < (*root).get_value())
+            if (k < root->getValue())
                 root->left = insert_node(root->left, k);
             else
                 root->right = insert_node(root->right, k);
@@ -135,7 +126,6 @@ public:
         remove_node(root, k);
     }
 
-    bool find(T k) {
-        return find_node(root, k);
-    }
 };
+
+
