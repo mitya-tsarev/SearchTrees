@@ -2,52 +2,85 @@
 #include <cstdlib>
 #include <ctime>
 #include <vector>
-#include "AVLTree.cpp"                    
+#include <fstream>
+#include <string>
+#include "AVLTree.cpp"
+#include "RBTree.cpp"                    
 using namespace std;
  
- struct times{ // структура, содержащая количество узлов дерева и средние времена выполнения операций для него
+ struct times{ // struct containing number of nodes in the tree and average operation execution times for it
  	int n;
  	double timeinsert;
  	double timefind;
  	double timeerase;
  };
 
-int main(){
+class Profiler: public AVL_Tree, public RB_Tree{
 
-	int x1 = 10, x2 = 10, y1 = 8, y2 = 1;
+private
 
-	srand(time(0));
+	string s;
+	
+public:
+	
+	Profiler(s1){
+		s = s1;
+	}
+	
+	~Profiler(){
+		
+	}
+	
+	vector<times> average(int x1, int x2, int x3, int x4){
+
+		srand(time(0));
     
     	double start;
     
-    	AVL_tree<int> avl = AVL_tree<int>();
+    	if (s == "AVL_Tree"){
+    		AVL_tree<int> avl = AVL_tree<int>();
+		}
+		else if (s == "RB_Tree"){
+			RB_Tree<int> avl = RB_Tree<int>();
+		}
     	
-        int array_size; // количество узлов дерева
-    	vector<times> plottimes; // вектор, в котором будут храниться точки с данными
+    	
+    	int array_size; // number of nodes
+    	vector<times> plottimes; // vector where data will be stored
     	times dot;
     	int test;
+    	
+    	double timeinsertn = 0;
+    	double timefindn = 0;
+    	double timeerasen = 0;
+    	double timeinsert1 = 0;
+	    double timefind1 = 0;
+	    double timeerase1 = 0;
+	    double timeinsert2 = 0;
+	    double timefind2 = 0;
+	    double timeerase2 = 0;
     
-    	for(int i = 1; i <= y1; i++){ // ищем средние времена выполнения операций для деревьев с разным количеством узлов
+    	for(int i = 1; i <= y1; i++){ // search for average operation execution times for trees with different number of nodes (y1)
     		array_size = i*1000000000;
-    		double timeinsertn = 0;
-    		double timefindn = 0;
-    		double timeerasen = 0;
-    		for (int k = 0; k < y2; k++){ // ищем средние времена выполнения операций для разных деревьев с одинаковым количеством узлов
-	    		avl = AVL_tree<int>(); // создаём новое дерево
-	    		for (int i = 0; i < array_size; i++)
+    		timeinsertn = 0;
+    		timefindn = 0;
+    		timeerasen = 0;
+    		for (int k = 0; k < y2; k++){ // search for average operation execution times for different trees with the same number of nodes (y2)
+	    		avl = AVL_tree<int>(); // create new tree
+	    		for (int j = 0; j < array_size; j++)
 	    		{
-	    			avl.insert(((rand() % 100000)*100000 + rand() % 10000) % (array_size*10)); // добавляем в дерево узлы со случайными значениями  			
+	    			avl.insert(((rand() % 100000)*100000 + rand() % 10000) % (array_size*10)); // add nodes with random values  			
 	    		}    
-	    		double timeinsert1 = 0;
-	    		double timefind1 = 0;
-	    		double timeerase1 = 0;
-	    		for (int i = 0; i < x1; i++){ // ищем средние времена выполнения операций для разных чисел
+	    		timeinsert1 = 0;
+	    		timefind1 = 0;
+	    		timeerase1 = 0;
+	    		for (int j = 0; j < x1; j++){ // search for average operation execution times for different numbers (x1)
 		    		test = ((rand() % 10000)*10000 + rand() % 10000) % (array_size*10);
 		    		cout << test << endl;
-		    		double timeinsert2 = 0;
-	    			double timefind2 = 0;
-	    			double timeerase2 = 0;
-		    		for (int j = 0; j < x2; j++){ // ищем средние времена выполнения операций для фиксированного числа
+		    		timeinsert2 = 0;
+	    			timefind2 = 0;
+	    			timeerase2 = 0;
+		    		for (int l = 0; l < x2; l++){ // search for average operation execution times for the same number (x2)
 		    			start = clock();
 		    			avl.insert(test);
 		    			timeinsert2 += clock()*10000 - start*10000;
@@ -56,14 +89,14 @@ int main(){
 	    				timefind2 += clock()*10000 - start*10000;
 	    				start = clock();
 	    				avl.erase(test);
-	    				timeerase2 += clock()*1000000 - start*10000;
+	    				timeerase2 += clock()*10000 - start*10000;
 					}
 					timeinsert2 = timeinsert2 / x2;
 					timefind2 = timefind2 / x2;
 					timeerase2 = timeerase2 / x2;
 	    			timeinsert1 += timeinsert2;
-	    			timefind1 += timefind2; 
-	    			timeerase1 += timeerase2; 
+	   				timefind1 += timefind2; 
+	   				timeerase1 += timeerase2; 
 				}
 				timeinsert1 = timeinsert1 / x1;
 				timefind1 = timefind1 / x1; 
@@ -81,8 +114,22 @@ int main(){
 	    	dot.timeerase = timeerasen;
 	    	plottimes.push_back(dot);
 		}
-		for(int i = 0; i < y1; i++){
-			cout << plottimes[i].n << ' ' << plottimes[i].timeinsert << ' ' << plottimes[i].timefind << ' ' << plottimes[i].timeerase << endl;	
-		}
+	}
+};
+
+int main(){
+	
+	ofstream out;
+	out.open("data.txt");
+	
+	Profiler prof = Profiler("AVL_Tree");
+    vector<times> a = prof.average(8, 8, 8, 1);
+	
+	for(int i = 0; i < y1; i++){
+		if (out.is_open()){
+			out << a[i].n << ' ' << a[i].timeinsert << ' ' << a[i].timefind << ' ' << a[i].timeerase << endl;
+		}			
+	}
+	out.close();
 	return 0;
 }
