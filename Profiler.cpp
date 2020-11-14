@@ -31,19 +31,7 @@ private:
 
 public:
 
-    Profiler(bool AVL) {ofstream out;
-        out.open("treeData.txt");
-        int y1 = 10;
-
-        Profiler<long long> prof = Profiler<long long>("AVL_Tree");
-        vector<times> a = prof.average(1, 1, 1, 1, 5000000);
-
-        for (int i = 0; i < y1; i++) {
-            if (out.is_open()) {
-                out << a[i].n << ' ' << a[i].timeinsert << ' ' << a[i].timefind << ' ' << a[i].timeerase << endl;
-            }
-        }
-        out.close();
+    Profiler(bool AVL) {
         this->AVL = AVL;
     }
 
@@ -59,7 +47,8 @@ public:
 
         if (AVL) {
             AVLTree<T> tre = AVLTree<T>();
-        } else {
+        } 
+		else{
             RBTree<T> tre = RBTree<T>();
         }
 
@@ -67,7 +56,7 @@ public:
         int array_size; // number of nodes
         vector<times> plottimes; // vector where data will be stored
         times dot;
-        int test;
+        long long test;
 
         double timeinsertn = 0;
         double timefindn = 0;
@@ -86,22 +75,26 @@ public:
             timefindn = 0;
             timeerasen = 0;
             for (int k = 0; k < y2; k++) { // search for average operation execution times for different trees with the same number of nodes (y2)
-                AVLTree<long long> tre = AVLTree<long long>(); // create new tree
+                if (AVL) {
+            		AVLTree<long long> tre = AVLTree<long long>();
+        		} 
+				else{
+            		RBTree<long long> tre = RBTree<long long>();
+        		} // create new tree
                 for (int j = 0; j < array_size; j++) {
                     tre.insert(((rand() % 10000) * 100000000 + (rand() % 10000) * 10000 + rand() % 10000) % (array_size * 100)); // add nodes with random values
                 }
                 timeinsert1 = 0;
                 timefind1 = 0;
                 timeerase1 = 0;
-                for (int j = 0;
-                     j < x1; j++) { // search for average operation execution times for different numbers (x1)
+                for (int j = 0;	j < x1; j++) { // search for average operation execution times for different numbers (x1)
                     test = ((rand() % 10000) * 10000 + rand() % 10000) % (array_size * 100);
                     cout << test << endl;
                     timeinsert2 = 0;
-                    timefind2 = 0;
+                    timefind2 = 0;                    
                     timeerase2 = 0;
                     for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)
-						auto t1 = Clock::now();
+						auto t1 = Clock::now();                      
                         tre.insert(test);
                         auto t2 = Clock::now();
                         timeinsert2 += chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count();
@@ -121,26 +114,6 @@ public:
                         tre.erase(test);
                         auto t2 = Clock::now();
                         timeerase2 += chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count();
-                        start = clock();
-                        tre.insert(test);
-                        finish = clock();
-                        timeinsert2 += (finish * Ct - start * Ct)/CLOCKS_PER_SEC;
-                        tre.erase(test);
-                    }
-                    for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)
-                        tre.insert(test);
-                        start = clock();
-                        tre.find(test);
-                        finish = clock();
-                        timefind2 += (finish * Ct - start * Ct)/CLOCKS_PER_SEC;
-                        tre.erase(test);
-                    }
-                    for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)
-                        tre.insert(test);
-                        start = clock();
-                        tre.erase(test);
-                        finish = clock();
-                        timeerase2 += (finish * Ct - start * Ct)/CLOCKS_PER_SEC;
                     }
                     timeinsert2 = timeinsert2 / x2;
                     timefind2 = timefind2 / x2;
@@ -168,13 +141,13 @@ public:
         return plottimes;
     }
 
-    void analyze(const std::string& filename, bool avl) {
+    void analyze(const std::string& filename, int x1, int x2, int y1, int y2, int nmult, bool avl) {
         ofstream out;
         out.open(filename);
         int y1 = 10;
 
         Profiler<long long> prof = Profiler<long long>(avl);
-        vector<times> a = prof.average(1, 1, 1, 1, 5000000);
+        vector<times> a = prof.average(x1, x2, y1, y2, nmult);
 
         for (int i = 0; i < y1; i++) {
             if (out.is_open()) {
