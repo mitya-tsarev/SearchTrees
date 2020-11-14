@@ -6,11 +6,8 @@
 #include <string>
 #include "AVLTree.h"
 #include "RBTree.h"
-<<<<<<< HEAD
 #include <chrono>
 #define nullptr NULL
-=======
->>>>>>> 94505048c53e31932a87862d0b561720e6bec6db
 
 typedef std::chrono::high_resolution_clock Clock;
 
@@ -29,7 +26,7 @@ class Profiler{
 private:
 
     string s;
-
+    
     const int Ct = 1000000;
 
 public:
@@ -89,10 +86,9 @@ public:
                     test = ((rand() % 10000) * 10000 + rand() % 10000) % (array_size * 100);
                     cout << test << endl;
                     timeinsert2 = 0;
-                    timefind2 = 0;
+                    timefind2 = 0;                    
                     timeerase2 = 0;
                     for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)
-<<<<<<< HEAD
 						auto t1 = Clock::now();                      
                         tre.insert(test);
                         auto t2 = Clock::now();
@@ -113,28 +109,6 @@ public:
                         tre.erase(test);
                         auto t2 = Clock::now();
                         timeerase2 += chrono::duration_cast<chrono::nanoseconds>(t2 - t1).count();
-=======
-                        start = clock();
-                        avl.insert(test);
-                        finish = clock();
-                        timeinsert2 += (finish * Ct - start * Ct)/CLOCKS_PER_SEC;
-                        avl.erase(test);
-                    }
-                    for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)
-                        avl.insert(test);
-                        start = clock();
-                        avl.find(test);
-                        finish = clock();
-                        timefind2 += (finish * Ct - start * Ct)/CLOCKS_PER_SEC;
-                        avl.erase(test);
-                    }
-                    for (int l = 0; l < x2; l++) { // search for average operation execution times for the same number (x2)
-                        avl.insert(test);
-                        start = clock();
-                        avl.erase(test);
-                        finish = clock();
-                        timeerase2 += (finish * Ct - start * Ct)/CLOCKS_PER_SEC;
->>>>>>> 94505048c53e31932a87862d0b561720e6bec6db
                     }
                     timeinsert2 = timeinsert2 / x2;
                     timefind2 = timefind2 / x2;
@@ -161,9 +135,9 @@ public:
         }
         return plottimes;
     }
+    
 };
 
-<<<<<<< HEAD
 int main() {
     /*RBTree<int> rb = RBTree<int>();
     rb.insert(5);
@@ -189,5 +163,3 @@ int main() {
     return 0;
 }
 
-=======
->>>>>>> 94505048c53e31932a87862d0b561720e6bec6db

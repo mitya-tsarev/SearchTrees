@@ -1,6 +1,6 @@
-#include <iostream>
-#include "AVLTree.h"
 #include "RBTree.h"
+#include "AVLTree.h"
+#include "Profiler.cpp"
 
 int main() {
     AVLTree<int> avl = AVLTree<int>();

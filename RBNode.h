@@ -17,6 +17,8 @@ private:
 
     RBNode<T> *getUncle();
 
+    RBNode<T> *getInorderSuccessor();
+
     RBNode<T> *recolor();
 
     RBNode<T> *llRotation();
@@ -26,6 +28,9 @@ private:
     RBNode<T> *rlRotation();
 
     RBNode<T> *rrRotation();
+
+    RBNode<T> *findNode(T val);
+
 
 public:
     explicit RBNode(T value);
@@ -62,6 +67,13 @@ RBNode<T> *RBNode<T>::recolor() {
 }
 
 template<typename T>
+RBNode<T> *RBNode<T>::findNode(T val) {
+    if (this->value == val) return this;
+    if (this->value > val) return left == nullptr ? nullptr : left->findNode(val);
+    return right == nullptr ? nullptr : right->findNode(val);
+}
+
+template<typename T>
 RBNode<T> *RBNode<T>::getSibling() {
     if (parent == nullptr) return nullptr;
     return (parent->value > this->value) ? parent->right : parent->left;
@@ -77,6 +89,22 @@ template<typename T>
 RBNode<T> *RBNode<T>::getUncle() {
     if (parent == nullptr) return nullptr;
     return parent->getSibling();
+}
+
+template<typename T>
+RBNode<T> *RBNode<T>::getInorderSuccessor() {
+    if (right != nullptr) {
+        RBNode<T> *is = right;
+        while (is->left != nullptr) is = is->left;
+        return is;
+    }
+    RBNode<T> *is = this;
+    while (is->parent != nullptr) {
+        if (is->parent->value < is->value) {
+            is = is->parent;
+        } else break;
+    }
+    return is->parent;
 }
 
 template<typename T>
@@ -192,6 +220,5 @@ RBNode<T> *RBNode<T>::insertionRebalance() { // return new root, nullptr if didn
     if (firstL) return (secondL ? llRotation() : lrRotation());
     else return (secondL ? rlRotation() : rrRotation());
 }
-
 
 #endif //TREEPROJECT_RBNODE_H
