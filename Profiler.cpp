@@ -123,27 +123,3 @@ public:
     }
 };
 
-int main() {
-    /*RBTree<int> rb = RBTree<int>();
-    rb.insert(5);
-    rb.insert(3);
-    rb.insert(179);
-    //rb.insert(1);
-    std::cout << "Searching RB tree: \n179: " << (rb.find(179) ? "Yes" : "No") << "\n40: " << (rb.find(40) ? "Yes" : "No") << '\n';*/
-
-    ofstream out;
-    out.open("data.txt");
-    int y1 = 1;
-
-    Profiler<int> prof = Profiler<int>("AVL_Tree");
-    vector<times> a = prof.average(1, 1, 1, 1);
-
-    for (int i = 0; i < y1; i++) {
-        if (out.is_open()) {
-            out << a[i].n << ' ' << a[i].timeinsert << ' ' << a[i].timefind << ' ' << a[i].timeerase << endl;
-        }
-    }
-    out.close();
-    return 0;
-}
-
