@@ -167,7 +167,6 @@ AVLNode<T> *AVLTree<T>::removeNode(AVLNode<T> *p, int k) {
     }
     AVLNode<T> *ret = balance(p);
     if (root == p) root = ret;
-    delete p;
     return ret;
 }
 
